@@ -2,7 +2,7 @@ package controllers
 
 import play.api.mvc._
 
-object QuestionController extends QuestionController{
+object QuestionController extends QuestionController {
 }
 
 class QuestionController extends Controller {
