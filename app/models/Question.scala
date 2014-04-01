@@ -5,17 +5,17 @@ import scala.slick.driver.PostgresDriver.simple._
 import org.joda.time.DateTime
 
 case class Question(
-                     id: Int,
-                     categoryId: Int,
-                     question: String,
-                     answer: String,
-                     questionCount: Int,
-                     rightCount: Int,
-                     createdAt: DateTime,
-                     modifiedAt: DateTime)
+    id: Int,
+    categoryId: Int,
+    question: String,
+    answer: String,
+    questionCount: Int,
+    rightCount: Int,
+    createdAt: DateTime,
+    modifiedAt: DateTime)
 
-class Questions extends Table[Question]("questions") {
-  def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
+class Questions extends Table[Question]("question") with TimeTypeMapper {
+  def id = column[Int]("id")
 
   def categoryId = column[Int]("category_id")
 
@@ -31,6 +31,5 @@ class Questions extends Table[Question]("questions") {
 
   def modifiedAt = column[DateTime]("modified_at")
 
-  def * = id ~ categoryId ~ question ~ answer ~ questionCount ~ rightCount ~ createdAt <> (Question.apply _, Question.unapply _)
-
+  def * = id ~ categoryId ~ question ~ answer ~ questionCount ~ rightCount ~ createdAt ~ modifiedAt <> (Question.apply _, Question.unapply _)
 }
