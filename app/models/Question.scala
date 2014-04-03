@@ -2,6 +2,8 @@ package models
 
 import scala.slick.driver.PostgresDriver.simple._
 
+import Database.threadLocalSession
+
 import org.joda.time.DateTime
 
 case class Question(
@@ -14,7 +16,7 @@ case class Question(
     createdAt: DateTime,
     modifiedAt: DateTime)
 
-class Questions extends Table[Question]("question") with TimeTypeMapper {
+class Questions extends Table[Question]("questions") with TimeTypeMapper {
   def id = column[Int]("id")
 
   def categoryId = column[Int]("category_id")
@@ -32,4 +34,13 @@ class Questions extends Table[Question]("question") with TimeTypeMapper {
   def modifiedAt = column[DateTime]("modified_at")
 
   def * = id ~ categoryId ~ question ~ answer ~ questionCount ~ rightCount ~ createdAt ~ modifiedAt <> (Question.apply _, Question.unapply _)
+
+  def getByQuestionId(questionId: Int): Option[Question] = {
+    val query = for {
+      ques <- Questions.filter(_.id === questionId)
+    } yield ques
+    query.firstOption
+  }
 }
+
+object Questions extends Questions

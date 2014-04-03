@@ -1,7 +1,9 @@
-@(message: String)
+@(message: String, question: Question)
 
 @main("BlueSkyからの問題") {
 
 @message
+<p>問題：@question.question</p>
+<p>答え：@question.answer</p>
 
 }
