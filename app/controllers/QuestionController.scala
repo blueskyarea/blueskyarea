@@ -20,8 +20,13 @@ class QuestionController extends Controller {
     database withSession {
       val r = new Random
       val questionId = r.nextInt(4) + 1
-      val question = Questions.getByQuestionId(1)
-      Ok(views.html.question.showQuestion("問題です！", question.get))
+      Questions.getByQuestionId(questionId) match {
+        case Some(question) =>
+          val fakeChoices = Questions.getFakeChoicesByCategoryId(question.categoryId, questionId)
+          val choices = r.shuffle(fakeChoices.::(question.answer))
+          Ok(views.html.question.showQuestion("問題です！", question, choices))
+        case _ => NotFound("対象の問題が見つかりません。")
+      }
     }
   }
 }
